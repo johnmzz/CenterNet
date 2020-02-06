@@ -10,7 +10,7 @@ import os
 
 import torch.utils.data as data
 
-class COCO(data.Dataset):
+class WiderFace(data.Dataset):
   num_classes = 80
   default_resolution = [512, 512]
   mean = np.array([0.40789654, 0.44719302, 0.47026115],
@@ -19,9 +19,9 @@ class COCO(data.Dataset):
                    dtype=np.float32).reshape(1, 1, 3)
 
   def __init__(self, opt, split):
-    super(COCO, self).__init__()
-    self.data_dir = os.path.join(opt.data_dir, 'coco')
-    self.img_dir = os.path.join(self.data_dir, '{}2017'.format(split))
+    super(WiderFace, self).__init__()
+    self.data_dir = os.path.join(opt.data_dir, 'widerface')
+    self.img_dir = os.path.join(self.data_dir, '{}'.format(split))
     print("@@@@@@@@@@@@@@")
     print(self.img_dir)
     print("@@@@@@@@@@@@@@")
@@ -79,7 +79,7 @@ class COCO(data.Dataset):
     self.split = split
     self.opt = opt
 
-    print('==> initializing coco 2017 {} data.'.format(split))
+    print('==> initializing widerface {} data.'.format(split))
     self.coco = coco.COCO(self.annot_path)
     self.images = self.coco.getImgIds()
     self.num_samples = len(self.images)
@@ -127,7 +127,6 @@ class COCO(data.Dataset):
     self.save_results(results, save_dir)
     coco_dets = self.coco.loadRes('{}/results.json'.format(save_dir))
     coco_eval = COCOeval(self.coco, coco_dets, "bbox")
-    #coco_eval.params.catIds = [1]
     coco_eval.evaluate()
     coco_eval.accumulate()
     coco_eval.summarize()

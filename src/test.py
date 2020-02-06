@@ -105,7 +105,7 @@ def test(opt):
     if opt.task == 'ddd':
       ret = detector.run(img_path, img_info['calib'])
     else:
-      ret = detector.run(img_path)
+      ret = detector.run(img_path)        ###### detect ######
     
     results[img_id] = ret['results']
 
@@ -116,7 +116,7 @@ def test(opt):
       Bar.suffix = Bar.suffix + '|{} {:.3f} '.format(t, avg_time_stats[t].avg)
     bar.next()
   bar.finish()
-  dataset.run_eval(results, opt.save_dir)
+  dataset.run_eval(results, opt.save_dir)       ###### eval ######
 
 if __name__ == '__main__':
   opt = opts().parse()

@@ -12,8 +12,8 @@ class opts(object):
     # basic experiment setting
     self.parser.add_argument('task', default='ctdet',
                              help='ctdet | ddd | multi_pose | exdet')
-    self.parser.add_argument('--dataset', default='coco',
-                             help='coco | kitti | coco_hp | pascal')
+    self.parser.add_argument('--dataset', default='fdst',
+                             help='fdst | coco | kitti | coco_hp | pascal')   # MINE: added fdst as default
     self.parser.add_argument('--exp_id', default='default')
     self.parser.add_argument('--test', action='store_true')
     self.parser.add_argument('--debug', type=int, default=0,
@@ -338,6 +338,9 @@ class opts(object):
       'ctdet': {'default_resolution': [512, 512], 'num_classes': 80, 
                 'mean': [0.408, 0.447, 0.470], 'std': [0.289, 0.274, 0.278],
                 'dataset': 'coco'},
+      #'ctdet': {'default_resolution': [512, 512], 'num_classes': 1,              # MINE
+      #          'mean': [0.43149853,0.42709503,0.42243978], 'std': [0.20863475,0.20143777,0.19956721],
+      #          'dataset': 'fdst'},
       'exdet': {'default_resolution': [512, 512], 'num_classes': 80, 
                 'mean': [0.408, 0.447, 0.470], 'std': [0.289, 0.274, 0.278],
                 'dataset': 'coco'},

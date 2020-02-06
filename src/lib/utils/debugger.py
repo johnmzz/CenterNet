@@ -45,6 +45,10 @@ class Debugger(object):
       self.names = coco_class_name
     elif num_classes == 20 or dataset == 'pascal':
       self.names = pascal_class_name
+    elif num_classes == 1 or dataset == 'fdst':
+      self.names = fdst_class_name
+    elif num_classes == 1 or dataset == 'UCSD':
+      self.names = UCSD_class_name
     elif dataset == 'gta':
       self.names = gta_class_name
       self.focal_length = 935.3074360871937
@@ -455,6 +459,10 @@ coco_class_name = [
      'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
      'scissors', 'teddy bear', 'hair drier', 'toothbrush'
 ]
+
+UCSD_class_name = ['person']
+
+fdst_class_name = ['person']
 
 color_list = np.array(
         [

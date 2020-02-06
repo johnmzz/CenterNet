@@ -89,8 +89,13 @@ class CtdetDetector(BaseDetector):
 
   def show_results(self, debugger, image, results):
     debugger.add_img(image, img_id='ctdet')
+    num_people = 0  # MINE
     for j in range(1, self.num_classes + 1):
       for bbox in results[j]:
         if bbox[4] > self.opt.vis_thresh:
           debugger.add_coco_bbox(bbox[:4], j - 1, bbox[4], img_id='ctdet')
-    debugger.show_all_imgs(pause=self.pause)
+          if j == 1:  # MINE: if category is people
+            num_people += 1   # MINE
+    #debugger.show_all_imgs(pause=self.pause)
+    debugger.save_all_imgs(path='../output')
+    return num_people     # MINE

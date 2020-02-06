@@ -17,8 +17,8 @@ from trains.train_factory import train_factory
 
 
 def main(opt):
-  torch.manual_seed(opt.seed)
-  torch.backends.cudnn.benchmark = not opt.not_cuda_benchmark and not opt.test
+  torch.manual_seed(opt.seed)     # sets random seed for pytorch random number generator
+  torch.backends.cudnn.benchmark = not opt.not_cuda_benchmark and not opt.test      # enable inbuilt cudnn auto-tuner to find the best algorithm for hardware, if both opts not set.
   Dataset = get_dataset(opt.dataset, opt.task)
   opt = opts().update_dataset_info_and_set_heads(opt, Dataset)
   print(opt)
@@ -32,6 +32,8 @@ def main(opt):
   model = create_model(opt.arch, opt.heads, opt.head_conv)
   optimizer = torch.optim.Adam(model.parameters(), opt.lr)
   start_epoch = 0
+
+  # load model if specified
   if opt.load_model != '':
     model, optimizer, start_epoch = load_model(
       model, opt.load_model, optimizer, opt.resume, opt.lr, opt.lr_step)
@@ -67,11 +69,13 @@ def main(opt):
   best = 1e10
   for epoch in range(start_epoch + 1, opt.num_epochs + 1):
     mark = epoch if opt.save_all else 'last'
-    log_dict_train, _ = trainer.train(epoch, train_loader)
+    log_dict_train, _ = trainer.train(epoch, train_loader)      ###### training ######
     logger.write('epoch: {} |'.format(epoch))
+
     for k, v in log_dict_train.items():
       logger.scalar_summary('train_{}'.format(k), v, epoch)
       logger.write('{} {:8f} | '.format(k, v))
+
     if opt.val_intervals > 0 and epoch % opt.val_intervals == 0:
       save_model(os.path.join(opt.save_dir, 'model_{}.pth'.format(mark)), 
                  epoch, model, optimizer)
@@ -85,9 +89,11 @@ def main(opt):
         save_model(os.path.join(opt.save_dir, 'model_best.pth'), 
                    epoch, model)
     else:
-      save_model(os.path.join(opt.save_dir, 'model_last.pth'), 
-                 epoch, model, optimizer)
+      save_model(os.path.join(opt.save_dir, 'model_last.pth'),
+                 epoch, model, optimizer)                         # save model
     logger.write('\n')
+
+    # adjust lr every certain epochs
     if epoch in opt.lr_step:
       save_model(os.path.join(opt.save_dir, 'model_{}.pth'.format(epoch)), 
                  epoch, model, optimizer)
